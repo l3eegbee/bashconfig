@@ -1,0 +1,7 @@
+
+context "snip.context = {'register': None}"
+post_jump "snip.expand_anon(vim.eval('@' + snip.context['register']))"
+snippet '_([a-zA-Z])' "register" rm
+`!p snip.context['register'] = match.group(1)`
+endsnippet
+

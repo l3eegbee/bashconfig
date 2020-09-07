@@ -1,0 +1,89 @@
+
+snippet pa "package"
+package `!v expand('%:p:h:gs?/\|\\?.?:s?.*\.java\.??')`;
+endsnippet
+
+snippet ncl "new class"
+package `!v expand('%:p:h:gs?/\|\\?.?:s?.*\.java\.??')`;
+
+public class `!v expand('%:t:r')` {
+
+	$0
+
+}
+endsnippet
+
+snippet nin "new interface"
+package `!v expand('%:p:h:gs?/\|\\?.?:s?.*\.java\.??')`;
+
+public interface `!v expand('%:t:r')` {
+	
+	$0
+
+}
+endsnippet
+
+snippet var "variable"
+$1 ${1/.*/\l$0/}
+endsnippet
+
+snippet cv "set property"
+this.$1 = $1;
+endsnippet
+
+snippet new
+$1 ${2:${1/.*/\l$0/}} = new ${3:$1}($0);
+endsnippet
+
+snippet ge "get"
+public ${1:String} get${2/.*/\u$0/}() {
+	return this.$2;
+}
+endsnippet
+snippet se "set"
+public void set${2/.*/\u$0/}( ${1:String} ${2///} ) {
+	this.$2 = $2;
+}
+endsnippet
+snippet gs "get set"
+public ${1:String} get${2/.*/\u$0/}() {
+	return this.$2;
+}
+
+public void set${2/.*/\u$0/}( $1 $2 ) {
+	this.$2 = $2;
+}
+endsnippet
+
+snippet bean "Bean"
+@Bean
+public $1 ${1/.*/\l$0/}() {
+	return new $1();
+}
+endsnippet
+
+snippet exc "Exception"
+package `!v expand('%:p:h:gs?/\|\\?.?:s?.*\.java\.??')`;
+
+public class `!v expand('%:t:r')` extends ${1:Exception} {
+
+	private static final long serialVersionUID = 1l;
+
+	public `!v expand('%:t:r')`() {
+		super();
+	}
+
+	public `!v expand('%:t:r')`( String message ) {
+		super( message );
+	}
+
+	public `!v expand('%:t:r')`( String message, Throwable cause ) {
+		super( message, cause );
+	}
+
+	public `!v expand('%:t:r')`( Throwable cause ) {
+		super( cause );
+	}
+
+}
+endsnippet

@@ -1,0 +1,90 @@
+
+# -- PATH --
+
+export PATH=$HOME/.bin:$HOME/.local/bin:/usr/local/bin:$PATH
+export ZSH=$HOME/.oh-my-zsh
+
+# BREW
+if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+  eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+  rm -f ~/.zcompdump; compinit
+fi
+
+# SDKMAN
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# CARGO (RUST)
+if [ -d "$HOME/.cargo/bin" ]; then
+  export PATH=$HOME/.cargo/bin:$PATH
+fi
+
+# GO CONFIG
+if type go >/dev/null 2>&1; then
+  export GOPATH=$(go env GOPATH)
+  export PATH=$PATH:$GOPATH/bin
+fi
+
+[ -r "$HOME/.zprofile" ] && source "$HOME/.zprofile"
+
+# -- PLUGINS --
+
+ZSH_THEME="robbyrussell"
+plugins=( git )
+plugins+=( aws )
+plugins+=( docker docker-compose )
+plugins+=( kubectl )
+plugins+=( golang )
+
+# -- OH MY ZSH --
+
+source $ZSH/oh-my-zsh.sh
+
+# -- OTHERS --
+
+# Additionnal bash config
+if [ -d /etc/profile.d ]; then
+  for i in /etc/profile.d/*.sh; do
+    if [ -r $i ]; then
+      . $i
+    fi
+  done
+  unset i
+fi
+
+# User configuration
+
+unsetopt share_history
+
+export MANPATH="/usr/local/man:$MANPATH"
+export LANG=fr_FR.UTF-8
+export EDITOR='vim'
+export SSH_KEY_PATH="~/.ssh/rsa_id"
+export LESS=-FRX
+
+# Alias
+
+alias sl="ls"
+alias gti="git"
+alias vm="vim"
+alias :q="exit"
+alias watch="watch "
+alias k="kubectl"
+
+[[ -s "$HOME/.zaliases" ]] && source "$HOME/.zaliases"
+
+# PURE
+autoload -U promptinit; promptinit
+prompt pure
+
+# Make zsh know about hosts already accessed by SSH
+zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
+
+# CUSTOM FUNCTIONS
+
+# Create a new directory and enter it
+function mkd() {
+  mkdir -p "$@" && cd "$_";
+}
+

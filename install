@@ -1,0 +1,46 @@
+#!/bin/bash
+
+install_dir=`dirname $(readlink -f $0)`
+echo "Install dir: $install_dir"
+
+function symlink {
+
+    if [ -f $2 -o -h $2 -o -d $2 ]; then
+        echo "Remove $2";
+        rm -rf $2;
+    fi
+
+    echo "Install $1 -> $2"
+    ln -sf $1 $2
+
+}
+
+# install terminator theme
+
+mkdir -p ~/.config/terminator
+symlink $install_dir/terminator/config ~/.config/terminator/config
+
+# install zsh
+
+symlink $install_dir/zsh/zshrc ~/.zshrc
+
+# install ctags
+
+symlink $install_dir/ctags/ctags ~/.ctags
+
+# install git config
+
+symlink $install_dir/git/gitconfig ~/.gitconfig
+symlink $install_dir/git/gitignore ~/.gitignore
+
+# install neovim
+
+mkdir -p ~/.config/nvim
+for i in $install_dir/nvim/*; do
+    symlink $i ~/.config/nvim/$(basename $i)
+done
+
+echo "To install vim-plug:"
+echo "curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \\"
+echo " https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+

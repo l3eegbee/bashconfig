@@ -1,0 +1,12 @@
+
+# vim
+*.swp
+*.swo
+
+# eclipse
+workbench.xmi
+.project
+.settings
+.classpath
+.factorypath
+
